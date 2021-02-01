@@ -1,20 +1,20 @@
 class Category:
-    def __init__(self, category):
-        self.category = category
+    def __init__(self, description):
+        self.description = description
         self.ledger = []
         self.__balance = 0.0
 
     def __repr__(self):
-        header = self.category.center(30, "*") + "\n"
+        header = self.description.center(30, "*") + "\n"
         ledger = ""
         for item in self.ledger:
             # format description and amount
             line_description = "{:<23}".format(item["description"])
             line_amount = "{:>7.2f}".format(item["amount"])
-            # Truncate description and amount to 23 and 7 characters respectively
+            # Truncate ledger description and amount to 23 and 7 characters respectively
             ledger += "{}{}\n".format(line_description[:23], line_amount[:7])
         total = "Total: {:.2f}".format(self.__balance)
-        return "{}{}{}".format(header, ledger, total)
+        return header + ledger + total
 
     def deposit(self, amount, description=""):
         self.ledger.append({"amount": amount, "description": description})
@@ -32,8 +32,8 @@ class Category:
         return self.__balance
 
     def transfer(self, amount, category_instance):
-        if self.withdraw(amount, "Transfer to {}".format(category_instance.category)):
-            category_instance.deposit(amount, "Transfer from {}".format(self.category))
+        if self.withdraw(amount, "Transfer to {}".format(category_instance.description)):
+            category_instance.deposit(amount, "Transfer from {}".format(self.description))
             return True
         else:
             return False
