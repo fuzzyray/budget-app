@@ -21,7 +21,7 @@ class Category:
         self.__balance += amount
 
     def withdraw(self, amount, description=""):
-        if self.__balance - amount >= 0:
+        if check_funds(amount):
             self.ledger.append({"amount": -1 * amount, "description": description})
             self.__balance -= amount
             return True
@@ -32,9 +32,10 @@ class Category:
         return self.__balance
 
     def transfer(self, amount, category_instance):
-        if self.withdraw(amount, "Transfer to {}".format(category_instance.description)):
-            category_instance.deposit(amount, "Transfer from {}".format(self.description))
-            return True
+        if check_funds(amount):
+            if self.withdraw(amount, "Transfer to {}".format(category_instance.description)):
+                category_instance.deposit(amount, "Transfer from {}".format(self.description))
+                return True
         else:
             return False
 
